@@ -1,0 +1,41 @@
+.card {
+  background-color: hwb(254 6% 20% / 0.675);
+  border: 1px solid #e0e7e9;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 10px;
+  max-width: 260px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #e2e3eff3;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.avatar {
+  font-size: 28px;
+  background-color: lab(0.94% 4.11 -7.98);
+  border-radius: 50%;
+  padding: 6px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: hwb(0 0% 100%);
+}
+
+.card-body {
+  font-size: 16px;
+  color: hsl(0, 0%, 33%);
+}
+
+.label {
+  font-weight: bold;
+  color: hsl(0, 0%, 33%);
+}
