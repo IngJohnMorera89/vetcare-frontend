@@ -1,0 +1,14 @@
+@if (mascota) {
+  <section class="detalle">
+    <img class="detalle-foto" [src]="mascota.foto" [alt]="'Foto de ' + mascota.nombre" />
+    <div class="detalle-info">
+      <h1 class="detalle-nombre">{{ mascota.nombre }}</h1>
+      <p class="detalle-dato"><strong>Especie:</strong> {{ mascota.especie }}</p>
+      <p class="detalle-dato"><strong>Edad:</strong> {{ mascota.edad }} años</p>
+      <p class="detalle-dato"><strong>Dueño:</strong> {{ mascota.dueno }}</p>
+      <a routerLink="/mascotas" class="volver">← Volver al listado</a>
+    </div>
+  </section>
+} @else {
+  <p class="sin-resultado">No se encontró la mascota solicitada.</p>
+}

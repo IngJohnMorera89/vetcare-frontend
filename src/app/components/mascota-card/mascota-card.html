@@ -1,10 +1,7 @@
 <div class="card">
-  <div class="card-header">
-    <span class="avatar">🐾</span>
-    <h3>{{ nombre }}</h3>
-  </div>
-  <div class="card-body">
-    <p><span class="label">Especie:</span> {{ especie }}</p>
-    <p><span class="label">Edad:</span> {{ edad }} años</p>
+  <img class="card-foto" [src]="foto" [alt]="'Foto de ' + nombre" />
+  <div class="card-cuerpo">
+    <h3 class="card-nombre">{{ nombre }}</h3>
+    <p class="card-datos">{{ especie }} · {{ edad }} años</p>
   </div>
 </div>

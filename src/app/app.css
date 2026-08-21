@@ -1,0 +1,37 @@
+.barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--azul-principal);
+  padding: var(--espacio-sm) var(--espacio-lg);
+  box-shadow: var(--sombra);
+}
+
+.marca {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.barra-links {
+  display: flex;
+  gap: var(--espacio-md);
+}
+
+.barra-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.barra-link:hover {
+  opacity: 1;
+}
+
+.contenido {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--espacio-lg) var(--espacio-md);
+}

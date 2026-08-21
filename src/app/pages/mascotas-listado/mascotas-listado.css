@@ -1,0 +1,21 @@
+.titulo-pagina {
+  color: var(--azul-oscuro);
+  margin-bottom: var(--espacio-md);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--espacio-md);
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.card-link:hover {
+  transform: translateY(-4px);
+}

@@ -1,0 +1,10 @@
+<h1 class="titulo-pagina">Mascotas de VetCare</h1>
+
+<div class="grid">
+  @for (m of mascotas; track m.id) {
+    <a [routerLink]="['/mascotas', m.id]" class="card-link">
+      <app-mascota-card [nombre]="m.nombre" [especie]="m.especie" [edad]="m.edad" [foto]="m.foto">
+      </app-mascota-card>
+    </a>
+  }
+</div>

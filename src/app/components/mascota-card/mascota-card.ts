@@ -10,4 +10,5 @@ export class MascotaCard {
   @Input() nombre = '';
   @Input() especie = '';
   @Input() edad = 0;
+  @Input() foto = '';
 }

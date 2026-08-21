@@ -1,9 +1,11 @@
-<h1>Bienvenido a {{ nombreClinica }}</h1>
+<nav class="barra">
+  <span class="marca">🐾 VetCare</span>
+  <div class="barra-links">
+    <a routerLink="/" class="barra-link">Inicio</a>
+    <a routerLink="/mascotas" class="barra-link">Mascotas</a>
+  </div>
+</nav>
 
-@if (mascotas.length === 0) {
-  <p>No hay mascotas registradas.</p>
-} @else {
-  @for (m of mascotas; track m.nombre) {
-    <app-mascota-card [nombre]="m.nombre" [especie]="m.especie" [edad]="m.edad"> </app-mascota-card>
-  }
-}
+<main class="contenido">
+  <router-outlet></router-outlet>
+</main>
