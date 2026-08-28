@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, output } from '@angular/core';
 
 @Component({
   selector: 'app-mascota-card',
@@ -11,4 +11,13 @@ export class MascotaCard {
   @Input() especie = '';
   @Input() edad = 0;
   @Input() foto = '';
+  @Input() esFavorito = false;
+
+  favoritoCambiado = output<void>();
+
+  alClicFavorito(evento: Event) {
+    evento.stopPropagation();
+    evento.preventDefault();
+    this.favoritoCambiado.emit();
+  }
 }

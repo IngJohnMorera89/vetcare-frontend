@@ -2,7 +2,12 @@
   <span class="marca">🐾 VetCare</span>
   <div class="barra-links">
     <a routerLink="/" class="barra-link">Inicio</a>
-    <a routerLink="/mascotas" class="barra-link">Mascotas</a>
+    <a routerLink="/mascotas" class="barra-link">
+      Mascotas
+      @if (totalFavoritos() > 0) {
+        <span class="badge">{{ totalFavoritos() }}</span>
+      }
+    </a>
   </div>
 </nav>
 

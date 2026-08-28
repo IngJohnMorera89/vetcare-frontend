@@ -1,10 +1,27 @@
 <h1 class="titulo-pagina">Mascotas de VetCare</h1>
 
+<input
+  #inputBusqueda
+  type="text"
+  class="buscador"
+  placeholder="Buscar mascota por nombre..."
+  (input)="busqueda.set(inputBusqueda.value)"
+/>
+
 <div class="grid">
-  @for (m of mascotas; track m.id) {
+  @for (m of mascotasFiltradas(); track m.id) {
     <a [routerLink]="['/mascotas', m.id]" class="card-link">
-      <app-mascota-card [nombre]="m.nombre" [especie]="m.especie" [edad]="m.edad" [foto]="m.foto">
+      <app-mascota-card
+        [nombre]="m.nombre"
+        [especie]="m.especie"
+        [edad]="m.edad"
+        [foto]="m.foto"
+        [esFavorito]="esFavorito(m.id)"
+        (favoritoCambiado)="alternarFavorito(m.id)"
+      >
       </app-mascota-card>
     </a>
+  } @empty {
+    <p class="sin-resultado">No encontramos mascotas con ese nombre.</p>
   }
 </div>
