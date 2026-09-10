@@ -8,20 +8,60 @@
   (input)="busqueda.set(inputBusqueda.value)"
 />
 
-<div class="grid">
-  @for (m of mascotasFiltradas(); track m.id) {
-    <a [routerLink]="['/mascotas', m.id]" class="card-link">
-      <app-mascota-card
-        [nombre]="m.nombre"
-        [especie]="m.especie"
-        [edad]="m.edad"
-        [foto]="m.foto"
-        [esFavorito]="esFavorito(m.id)"
-        (favoritoCambiado)="alternarFavorito(m.id)"
-      >
-      </app-mascota-card>
-    </a>
-  } @empty {
-    <p class="sin-resultado">No encontramos mascotas con ese nombre.</p>
+@if (cargando()) {
+  <p class="estado-carga">Cargando mascotas desde el servidor...</p>
+}
+
+@if (error()) {
+  <p class="estado-error">{{ error() }}</p>
+}
+
+@if (!cargando() && !error()) {
+  <div class="grid">
+    @for (m of mascotasFiltradas(); track m.id) {
+      <a [routerLink]="['/mascotas', m.id]" class="card-link">
+        <app-mascota-card
+          [nombre]="m.nombre"
+          [especie]="m.especie"
+          [edad]="m.edad"
+          [foto]="m.foto"
+          [esFavorito]="esFavorito(m.id)"
+          (favoritoCambiado)="alternarFavorito(m.id)"
+        >
+        </app-mascota-card>
+      </a>
+    } @empty {
+      <p class="sin-resultado">No encontramos mascotas con ese nombre.</p>
+    }
+  </div>
+}
+
+<section class="registro">
+  <h2 class="registro-titulo">Registrar nueva mascota</h2>
+
+  @if (duenos().length === 0) {
+    <p class="estado-carga">
+      Todavía no hay dueños registrados. Ve a
+      <a routerLink="/duenos">Dueños</a> y registra uno primero.
+    </p>
+  } @else {
+    <form
+      class="registro-form"
+      (submit)="
+        registrarMascota($event, inputNombre, inputEspecie, inputRaza, inputEdad, selectDueno)
+      "
+    >
+      <input #inputNombre type="text" placeholder="Nombre" required />
+      <input #inputEspecie type="text" placeholder="Especie (Perro, Gato...)" required />
+      <input #inputRaza type="text" placeholder="Raza (opcional)" />
+      <input #inputEdad type="number" placeholder="Edad" min="0" />
+      <select #selectDueno required>
+        <option value="" disabled selected>Dueño...</option>
+        @for (d of duenos(); track d.id) {
+          <option [value]="d.id">{{ d.nombre }} {{ d.apellido }}</option>
+        }
+      </select>
+      <button type="submit" class="registro-boton">Registrar</button>
+    </form>
   }
-</div>
+</section>

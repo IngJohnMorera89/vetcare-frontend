@@ -3,46 +3,6 @@
   margin-bottom: var(--espacio-md);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: var(--espacio-md);
-}
-
-.buscador {
-  display: block;
-  width: 100%;
-  max-width: 360px;
-  margin-bottom: var(--espacio-md);
-  padding: var(--espacio-xs) var(--espacio-sm);
-  border: 1px solid var(--borde);
-  border-radius: var(--radio);
-  font-size: 1rem;
-  font-family: inherit;
-  color: var(--texto);
-}
-.card-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  transition: transform 0.2s ease;
-}
-
-.card-link:hover {
-  transform: translateY(-4px);
-}
-
-.buscador:focus {
-  outline: none;
-  border-color: var(--azul-principal);
-  box-shadow: 0 0 0 3px var(--azul-claro);
-}
-
-.sin-resultado {
-  color: var(--texto-suave);
-  padding: var(--espacio-lg) 0;
-}
-
 .estado-carga {
   color: var(--texto-suave);
   padding: var(--espacio-md) 0;
@@ -55,6 +15,33 @@
   border-radius: var(--radio);
   padding: var(--espacio-sm);
   margin-bottom: var(--espacio-md);
+}
+
+.tabla-duenos {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--superficie);
+  border-radius: var(--radio);
+  overflow: hidden;
+  box-shadow: var(--sombra);
+}
+
+.tabla-duenos th,
+.tabla-duenos td {
+  text-align: left;
+  padding: var(--espacio-sm);
+  border-bottom: 1px solid var(--borde);
+}
+
+.tabla-duenos th {
+  background: var(--azul-claro);
+  color: var(--azul-oscuro);
+}
+
+.sin-resultado {
+  color: var(--texto-suave);
+  text-align: center;
+  padding: var(--espacio-lg) 0;
 }
 
 .registro {
@@ -77,8 +64,7 @@
   gap: var(--espacio-sm);
 }
 
-.registro-form input,
-.registro-form select {
+.registro-form input {
   flex: 1 1 160px;
   padding: var(--espacio-xs) var(--espacio-sm);
   border: 1px solid var(--borde);
@@ -88,8 +74,7 @@
   color: var(--texto);
 }
 
-.registro-form input:focus,
-.registro-form select:focus {
+.registro-form input:focus {
   outline: none;
   border-color: var(--azul-principal);
   box-shadow: 0 0 0 3px var(--azul-claro);

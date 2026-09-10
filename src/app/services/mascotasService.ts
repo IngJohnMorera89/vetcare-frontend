@@ -1,4 +1,5 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 export interface Mascota {
   id: number;
@@ -9,42 +10,68 @@ export interface Mascota {
   foto: string;
 }
 
+export interface NuevaMascota {
+  nombre: string;
+  especie: string;
+  raza: string;
+  edad: number;
+  duenoId: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class MascotasService {
-  private listaMascotas = signal<Mascota[]>([
-    {
-      id: 1,
-      nombre: 'Firulais',
-      especie: 'Perro',
-      edad: 4,
-      dueno: 'Ana Torres',
-      foto: 'https://placedog.net/600/400?id=1',
-    },
-    {
-      id: 2,
-      nombre: 'Michi',
-      especie: 'Gato',
-      edad: 2,
-      dueno: 'Luis Pérez',
-      foto: 'https://loremflickr.com/600/400/cat?lock=2',
-    },
-    {
-      id: 3,
-      nombre: 'Rocky',
-      especie: 'Perro',
-      edad: 6,
-      dueno: 'María Gómez',
-      foto: 'https://placedog.net/600/400?id=7',
-    },
-  ]);
+  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost:8080/api/mascotas';
+
+  private listaMascotas = signal<Mascota[]>([]);
+  private cargandoSignal = signal<boolean>(true);
+  private errorSignal = signal<string | null>(null);
 
   mascotas = this.listaMascotas.asReadonly();
+  cargando = this.cargandoSignal.asReadonly();
+  error = this.errorSignal.asReadonly();
 
   private idsFavoritos = signal<Set<number>>(new Set());
-
   totalFavoritos = computed(() => this.idsFavoritos().size);
+
+  constructor() {
+    this.cargarMascotas();
+  }
+
+  // GET /api/mascotas
+  cargarMascotas() {
+    this.cargandoSignal.set(true);
+    this.errorSignal.set(null);
+
+    this.http.get<Mascota[]>(this.apiUrl).subscribe({
+      next: (datos) => {
+        this.listaMascotas.set(datos);
+        this.cargandoSignal.set(false);
+      },
+      error: () => {
+        this.errorSignal.set(
+          'No pudimos conectarnos con el servidor de VetCare. Verifica que el backend esté corriendo en el puerto 8080.',
+        );
+        this.cargandoSignal.set(false);
+      },
+    });
+  }
+
+  // POST /api/mascotas
+  crearMascota(nueva: NuevaMascota) {
+    this.http.post<Mascota>(this.apiUrl, nueva).subscribe({
+      next: (creada) => {
+        this.listaMascotas.update((actuales) => [...actuales, creada]);
+      },
+      error: () => {
+        this.errorSignal.set(
+          'No pudimos registrar la mascota. Revisa los datos e intenta de nuevo.',
+        );
+      },
+    });
+  }
 
   esFavorito(id: number): boolean {
     return this.idsFavoritos().has(id);
@@ -59,13 +86,6 @@ export class MascotasService {
         nuevos.add(id);
       }
       return nuevos;
-    });
-  }
-
-  constructor() {
-    effect(() => {
-      const idsActuales = [...this.idsFavoritos()];
-      localStorage.setItem('vetcare-favoritos', JSON.stringify(idsActuales));
     });
   }
 }
