@@ -1,0 +1,13 @@
+<section class="login-tarjeta">
+    <h1 class="login-titulo">Crear cuenta en VetCare</h1>
+  
+    @if (error()) {
+      <p class="estado-error">{{ error() }}</p>
+    }
+  
+    <form class="login-form" (submit)="crearCuenta($event, inputUsername, inputPassword)">
+      <input #inputUsername type="text" placeholder="Usuario" required>
+      <input #inputPassword type="password" placeholder="Contraseña" required>
+      <button type="submit" class="login-boton">Crear cuenta</button>
+    </form>
+  </section>

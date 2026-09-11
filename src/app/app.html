@@ -9,6 +9,12 @@
       }
     </a>
     <a routerLink="/duenos" class="barra-link">Dueños</a>
+
+    @if (authService.sesionActiva()) {
+      <a (click)="authService.cerrarSesion()" class="barra-link">Cerrar sesión</a>
+    } @else {
+      <a routerLink="/login" class="barra-link">Iniciar sesión</a>
+    }
   </div>
 </nav>
 
