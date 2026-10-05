@@ -1,0 +1,46 @@
+<h1 class="titulo-pagina">Dueños de VetCare</h1>
+
+@if (cargando()) {
+  <p class="estado-carga">Cargando dueños desde el servidor...</p>
+}
+
+@if (error()) {
+  <p class="estado-error">{{ error() }}</p>
+}
+
+@if (!cargando() && !error()) {
+  <table class="tabla-duenos">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Documento</th>
+        <th>Teléfono</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (d of duenos(); track d.id) {
+        <tr>
+          <td>{{ d.nombre }} {{ d.apellido }}</td>
+          <td>{{ d.documento }}</td>
+          <td>{{ d.telefono || '—' }}</td>
+          <td>{{ d.email || '—' }}</td>
+        </tr>
+      } @empty {
+        <tr><td colspan="4" class="sin-resultado">Todavía no hay dueños registrados.</td></tr>
+      }
+    </tbody>
+  </table>
+}
+
+<section class="registro">
+  <h2 class="registro-titulo">Registrar nuevo dueño</h2>
+  <form class="registro-form" (submit)="registrarDueno($event, inputNombre, inputApellido, inputDocumento, inputTelefono, inputEmail)">
+    <input #inputNombre type="text" placeholder="Nombre" required>
+    <input #inputApellido type="text" placeholder="Apellido" required>
+    <input #inputDocumento type="text" placeholder="Documento" required>
+    <input #inputTelefono type="text" placeholder="Teléfono (opcional)">
+    <input #inputEmail type="email" placeholder="Email (opcional)">
+    <button type="submit" class="registro-boton">Registrar</button>
+  </form>
+</section>

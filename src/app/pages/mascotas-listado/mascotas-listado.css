@@ -1,0 +1,114 @@
+.titulo-pagina {
+  color: var(--azul-oscuro);
+  margin-bottom: var(--espacio-md);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--espacio-md);
+}
+
+.buscador {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: var(--espacio-md);
+  padding: var(--espacio-xs) var(--espacio-sm);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--texto);
+}
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.card-link:hover {
+  transform: translateY(-4px);
+}
+
+.buscador:focus {
+  outline: none;
+  border-color: var(--azul-principal);
+  box-shadow: 0 0 0 3px var(--azul-claro);
+}
+
+.sin-resultado {
+  color: var(--texto-suave);
+  padding: var(--espacio-lg) 0;
+}
+
+.estado-carga {
+  color: var(--texto-suave);
+  padding: var(--espacio-md) 0;
+}
+
+.estado-error {
+  color: #b0413e;
+  background: #fbeceb;
+  border: 1px solid #f0c9c7;
+  border-radius: var(--radio);
+  padding: var(--espacio-sm);
+  margin-bottom: var(--espacio-md);
+}
+
+.registro {
+  margin-top: var(--espacio-lg);
+  padding: var(--espacio-md);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.registro-titulo {
+  color: var(--azul-oscuro);
+  margin-bottom: var(--espacio-sm);
+}
+
+.registro-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-sm);
+}
+
+.registro-form input,
+.registro-form select {
+  flex: 1 1 160px;
+  padding: var(--espacio-xs) var(--espacio-sm);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--texto);
+}
+
+.registro-form input:focus,
+.registro-form select:focus {
+  outline: none;
+  border-color: var(--azul-principal);
+  box-shadow: 0 0 0 3px var(--azul-claro);
+}
+
+.registro-boton {
+  flex: 0 0 auto;
+  padding: var(--espacio-xs) var(--espacio-md);
+  border: none;
+  border-radius: var(--radio);
+  background: var(--azul-principal);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.registro-boton:hover {
+  background: var(--azul-oscuro);
+}

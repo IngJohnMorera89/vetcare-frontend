@@ -1,0 +1,32 @@
+<nav class="barra">
+  <a routerLink="/" class="marca">🐾 VetCare</a>
+
+  @if (authService.sesionActiva()) {
+    <div class="barra-links">
+      <a routerLink="/agenda" class="barra-link">Agenda</a>
+      <a routerLink="/mascotas" class="barra-link">
+        Mascotas
+        @if (totalFavoritos() > 0) {
+          <span class="badge">{{ totalFavoritos() }}</span>
+        }
+      </a>
+      @if (puedeVerDuenos()) {
+        <a routerLink="/duenos" class="barra-link">Dueños</a>
+      }
+    </div>
+
+    <div class="barra-usuario">
+      <span class="saludo">Hola, <strong>{{ authService.nombre() }}</strong></span>
+      <span class="rol-chip">{{ etiquetaRol() }}</span>
+      <button type="button" class="boton-salir" (click)="authService.cerrarSesion()">
+        Cerrar sesión
+      </button>
+    </div>
+  } @else {
+    <a routerLink="/login" class="barra-link">Iniciar sesión</a>
+  }
+</nav>
+
+<main class="contenido">
+  <router-outlet></router-outlet>
+</main>

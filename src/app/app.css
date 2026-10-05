@@ -1,0 +1,86 @@
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-sm);
+  background: var(--azul-principal);
+  padding: var(--espacio-sm) var(--espacio-lg);
+  box-shadow: var(--sombra);
+}
+
+.marca {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.barra-links {
+  display: flex;
+  gap: var(--espacio-md);
+}
+
+.barra-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.barra-link:hover {
+  opacity: 1;
+}
+
+.barra-usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-sm);
+  color: #ffffff;
+}
+
+.rol-chip {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.boton-salir {
+  padding: 6px var(--espacio-sm);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radio);
+  background: transparent;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.boton-salir:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.contenido {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--espacio-lg) var(--espacio-md);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  margin-left: 6px;
+  border-radius: 999px;
+  background: #e0446f;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}

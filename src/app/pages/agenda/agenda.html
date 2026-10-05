@@ -1,0 +1,123 @@
+<header class="agenda-encabezado">
+    <div>
+      <h1 class="titulo-pagina">{{ esVeterinario() ? 'Mi agenda' : 'Agenda de la clínica' }}</h1>
+      <p class="subtitulo">Citas del día seleccionado, en orden de hora.</p>
+    </div>
+    <label class="campo-fecha">
+      Día
+      <input
+        #inputDia
+        type="date"
+        [value]="fechaSeleccionada()"
+        (change)="fechaSeleccionada.set(inputDia.value)">
+    </label>
+  </header>
+  
+  <section class="resumen">
+    <article class="resumen-tarjeta">
+      <span class="resumen-numero">{{ citasDelDia().length }}</span>
+      <span class="resumen-texto">Citas del día</span>
+    </article>
+    <article class="resumen-tarjeta">
+      <span class="resumen-numero">{{ pendientes() }}</span>
+      <span class="resumen-texto">Por atender</span>
+    </article>
+    <article class="resumen-tarjeta">
+      <span class="resumen-numero">{{ atendidas() }}</span>
+      <span class="resumen-texto">Atendidas</span>
+    </article>
+    @if (esAdmin()) {
+      <article class="resumen-tarjeta resumen-destacada">
+        <span class="resumen-numero">{{ pesos(ingresosDelDia()) }}</span>
+        <span class="resumen-texto">Ingresos del día</span>
+      </article>
+    }
+  </section>
+  
+  @if (error()) {
+    <p class="estado-error">{{ error() }}</p>
+  }
+  
+  @if (cargando()) {
+    <p class="estado-carga">Cargando la agenda...</p>
+  } @else {
+    <ul class="lista-citas">
+      @for (cita of citasDelDia(); track cita.id) {
+        <li
+          class="cita"
+          [class.cita-atendida]="cita.estado === 'ATENDIDA'"
+          [class.cita-cancelada]="cita.estado === 'CANCELADA'">
+          <span class="cita-hora">{{ hora(cita) }}</span>
+  
+          <div class="cita-cuerpo">
+            <p class="cita-titulo">
+              {{ cita.mascotaNombre }} <span class="cita-especie">· {{ cita.mascotaEspecie }}</span>
+            </p>
+            <p class="cita-detalle">{{ cita.motivo }} · Dueño: {{ cita.duenoNombre }}</p>
+            @if (!esVeterinario()) {
+              <p class="cita-detalle">Atiende: {{ cita.veterinarioNombre }}</p>
+            }
+            @if (cita.notas) {
+              <p class="cita-notas">
+                {{ cita.notas }}
+                @if (cita.costo !== null) {
+                  <strong> · {{ pesos(cita.costo) }}</strong>
+                }
+              </p>
+            }
+  
+            @if (citaEnAtencion() === cita.id) {
+              <form class="form-atencion" (submit)="atender($event, cita, textareaNotas, inputCosto)">
+                <textarea #textareaNotas rows="3" placeholder="Diagnóstico y tratamiento" required></textarea>
+                <input #inputCosto type="number" min="0" step="1000" placeholder="Costo de la consulta" required>
+                <div class="acciones">
+                  <button type="submit" class="boton">Guardar atención</button>
+                  <button type="button" class="boton-secundario" (click)="citaEnAtencion.set(null)">Cerrar</button>
+                </div>
+              </form>
+            }
+          </div>
+  
+          <div class="cita-lado">
+            <span class="chip" [class]="'chip-' + cita.estado.toLowerCase()">{{ cita.estado }}</span>
+            @if (cita.estado === 'PROGRAMADA') {
+              @if (esVeterinario() && citaEnAtencion() !== cita.id) {
+                <button type="button" class="boton" (click)="citaEnAtencion.set(cita.id)">Atender</button>
+              }
+              @if (puedeGestionar()) {
+                <button type="button" class="boton-peligro" (click)="cancelar(cita)">Cancelar</button>
+              }
+            }
+          </div>
+        </li>
+      } @empty {
+        <li class="sin-resultado">No hay citas para este día.</li>
+      }
+    </ul>
+  }
+  
+  @if (puedeGestionar()) {
+    <section class="registro">
+      <h2 class="registro-titulo">Agendar cita</h2>
+      <form
+        class="registro-form"
+        (submit)="agendar($event, selectMascota, selectVeterinario, inputFecha, inputHora, inputMotivo)">
+        <select #selectMascota required>
+          <option value="" disabled selected>Mascota...</option>
+          @for (m of mascotas(); track m.id) {
+            <option [value]="m.id">{{ m.nombre }} ({{ m.dueno }})</option>
+          }
+        </select>
+        <select #selectVeterinario required>
+          <option value="" disabled selected>Veterinario...</option>
+          @for (v of veterinarios(); track v.id) {
+            <option [value]="v.id">{{ v.nombre }} — {{ v.especialidad }}</option>
+          }
+        </select>
+        <input #inputFecha type="date" [value]="fechaSeleccionada()" required>
+        <input #inputHora type="time" required>
+        <input #inputMotivo type="text" placeholder="Motivo de la consulta" required>
+        <button type="submit" class="registro-boton">Agendar</button>
+      </form>
+    </section>
+  }
