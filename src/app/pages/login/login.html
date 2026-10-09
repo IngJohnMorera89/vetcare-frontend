@@ -1,17 +1,56 @@
-<section class="login-tarjeta">
-  <h1 class="login-titulo">Iniciar sesión en VetCare</h1>
+<div class="login">
+  <section class="login-marca">
+    <a routerLink="/" class="marca">
+      <img src="favicon.svg" alt="" width="36" height="36">
+      <span>VetCare</span>
+    </a>
+    <div>
+      <p class="marca-frase">Menos papeles, más tiempo para tus pacientes.</p>
+      <ul class="marca-lista">
+        <li><app-icono nombre="check" [tamano]="18" /> Agenda del día por veterinario</li>
+        <li><app-icono nombre="check" [tamano]="18" /> Historia clínica de cada paciente</li>
+        <li><app-icono nombre="check" [tamano]="18" /> Ingresos diarios en un panel</li>
+      </ul>
+    </div>
+  </section>
 
-  @if (error()) {
-    <p class="estado-error">{{ error() }}</p>
-  }
+  <section class="login-formulario">
+    <form class="tarjeta formulario" (submit)="ingresar($event)">
+      <h1 class="titulo-pagina">Iniciar sesión</h1>
+      <p class="subtitulo">Usa la cuenta que te entregó la administración de la clínica.</p>
 
-  <form class="login-form" (submit)="ingresar($event, inputUsername, inputPassword)">
-    <input #inputUsername type="text" placeholder="Usuario" required>
-    <input #inputPassword type="password" placeholder="Contraseña" required>
-    <button type="submit" class="login-boton">Ingresar</button>
-  </form>
+      @if (error()) {
+        <p class="alerta alerta-error" role="alert">{{ error() }}</p>
+      }
 
-  <p class="login-nota">
-    ¿No tienes cuenta? La administración de la clínica crea las cuentas del personal.
-  </p>
-</section>
+      <label class="campo">
+        <span>Usuario</span>
+        <input name="username" type="text" autocomplete="username" required autofocus>
+      </label>
+
+      <div class="campo">
+        <label for="clave">Contraseña</label>
+        <div class="campo-clave">
+          <input
+            id="clave"
+            name="password"
+            [type]="mostrarClave() ? 'text' : 'password'"
+            autocomplete="current-password"
+            required>
+          <button
+            type="button"
+            class="ver-clave"
+            [attr.aria-label]="mostrarClave() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            [attr.aria-pressed]="mostrarClave()"
+            (click)="mostrarClave.set(!mostrarClave())">
+            <app-icono [nombre]="mostrarClave() ? 'ojoCerrado' : 'ojo'" [tamano]="18" />
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primario btn-bloque" [disabled]="cargando()">
+        {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+    </form>
+  </section>
+</div>

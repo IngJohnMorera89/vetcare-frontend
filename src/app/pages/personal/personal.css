@@ -1,0 +1,13 @@
+.secciones {
+    display: grid;
+    gap: var(--espacio-md);
+  }
+  
+  .tarjeta .tabla-contenedor {
+    box-shadow: none;
+  }
+  
+  .interno {
+    margin-top: var(--espacio-sm);
+    box-shadow: none;
+  }

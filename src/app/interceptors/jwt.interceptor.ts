@@ -24,7 +24,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
         error.status === 401 && Boolean(token) && esPeticionAlBackend && !esPeticionDeAutenticacion;
 
       if (sesionRechazada) {
-        authService.cerrarSesion('/login');
+        authService.expirarSesion();
       }
 
       return throwError(() => error);

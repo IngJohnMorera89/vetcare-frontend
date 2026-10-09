@@ -1,35 +1,435 @@
+/* =========================================================
+   VetCare · Sistema de diseño global
+   1. Tokens (variables)  2. Base  3. Tipografía y página
+   4. Botones  5. Formularios  6. Tarjetas, chips y alertas
+   7. Tablas  8. Estados (vacío y carga)  9. Utilidades
+   ========================================================= */
+
+/* ---------- 1. Tokens ---------- */
 :root {
-  /* Paleta: veterinaria moderna, azul sereno y confiable */
+  /* Marca */
   --azul-principal: #2b7a9e;
   --azul-oscuro: #1f5a75;
+  --azul-profundo: #143e52;
   --azul-claro: #e8f4f9;
-  --fondo: #f4f9fc;
+
+  /* Neutros */
+  --fondo: #f4f8fb;
   --superficie: #ffffff;
   --texto: #1a2b33;
   --texto-suave: #5a7180;
-  --borde: #dbe9f0;
+  --borde: #dbe6ee;
 
-  /* Escala de espaciado consistente (múltiplos de 8px) */
+  /* Estados: cada uno con fondo claro y texto oscuro */
+  --exito: #1f7a52;
+  --exito-claro: #e3f5ec;
+  --peligro: #b0413e;
+  --peligro-claro: #fbeceb;
+  --aviso: #94600f;
+  --aviso-claro: #fdf3e1;
+  --neutro: #5f6b75;
+  --neutro-claro: #eef0f2;
+
+  /* Tipografía */
+  --fuente: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --texto-xs: 0.75rem;
+  --texto-sm: 0.875rem;
+  --texto-base: 1rem;
+  --texto-lg: 1.25rem;
+  --texto-xl: 1.75rem;
+  --texto-2xl: 2.5rem;
+
+  /* Espaciado: múltiplos de 8px */
   --espacio-xs: 8px;
   --espacio-sm: 16px;
   --espacio-md: 24px;
   --espacio-lg: 40px;
+  --espacio-xl: 64px;
 
-  /* Detalles de forma */
+  /* Forma, sombra y movimiento */
   --radio: 14px;
-  --sombra: 0 4px 16px rgba(31, 90, 117, 0.10);
+  --radio-sm: 8px;
+  --radio-pildora: 999px;
+  --sombra: 0 4px 16px rgba(31, 90, 117, 0.08);
+  --sombra-lg: 0 16px 40px rgba(20, 62, 82, 0.18);
+  --transicion: 0.2s ease;
+  --anillo-foco: 0 0 0 3px rgba(43, 122, 158, 0.35);
 }
 
-* {
+/* ---------- 2. Base ---------- */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 body {
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  background: var(--fondo);
-  color: var(--texto);
+  font-family: var(--fuente);
+  font-size: var(--texto-base);
   line-height: 1.6;
+  color: var(--texto);
+  background: var(--fondo);
+  -webkit-font-smoothing: antialiased;
 }
 
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--azul-principal);
+}
+
+:focus-visible {
+  outline: 3px solid var(--azul-principal);
+  outline-offset: 2px;
+}
+
+/* ---------- 3. Tipografía y página ---------- */
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  color: var(--azul-profundo);
+}
+
+.encabezado-pagina {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--espacio-sm);
+  margin-bottom: var(--espacio-md);
+}
+
+.titulo-pagina {
+  font-size: var(--texto-xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.subtitulo {
+  color: var(--texto-suave);
+}
+
+.titulo-seccion {
+  font-size: var(--texto-lg);
+  font-weight: 700;
+  margin-bottom: var(--espacio-sm);
+}
+
+/* ---------- 4. Botones ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: var(--radio-sm);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--transicion), border-color var(--transicion), transform var(--transicion);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primario {
+  background: var(--azul-principal);
+  color: #ffffff;
+}
+
+.btn-primario:hover:not(:disabled) {
+  background: var(--azul-oscuro);
+}
+
+.btn-secundario {
+  background: var(--superficie);
+  border-color: var(--borde);
+  color: var(--texto);
+}
+
+.btn-secundario:hover:not(:disabled) {
+  border-color: var(--azul-principal);
+  color: var(--azul-oscuro);
+}
+
+.btn-peligro {
+  background: var(--peligro-claro);
+  border-color: #f0c9c7;
+  color: var(--peligro);
+}
+
+.btn-peligro:hover:not(:disabled) {
+  background: #f6d9d7;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: var(--texto-xs);
+}
+
+.btn-icono {
+  padding: 8px;
+}
+
+/* ---------- 5. Formularios ---------- */
+.formulario-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--espacio-sm);
+  align-items: end;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo > span,
+.campo > label {
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-sm);
+  background: var(--superficie);
+  transition: border-color var(--transicion), box-shadow var(--transicion);
+}
+
+.campo textarea {
+  resize: vertical;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: var(--azul-principal);
+  box-shadow: var(--anillo-foco);
+}
+
+.campo-ayuda {
+  font-size: var(--texto-xs);
+  color: var(--texto-suave);
+}
+
+/* Buscador: un ícono y un campo dentro de la misma caja */
+.buscador {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(340px, 100%);
+  padding: 0 12px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-sm);
+  background: var(--superficie);
+  color: var(--texto-suave);
+}
+
+.buscador:focus-within {
+  border-color: var(--azul-principal);
+  box-shadow: var(--anillo-foco);
+}
+
+.buscador input {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--texto);
+}
+
+/* Formulario plegable con <details> */
+.plegable {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.plegable > summary {
+  padding: var(--espacio-sm) var(--espacio-md);
+  font-weight: 700;
+  color: var(--azul-oscuro);
+  cursor: pointer;
+}
+
+.plegable[open] > summary {
+  border-bottom: 1px solid var(--borde);
+}
+
+.plegable > form {
+  padding: var(--espacio-md);
+}
+
+/* ---------- 6. Tarjetas, chips y alertas ---------- */
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: var(--espacio-md);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: var(--radio-pildora);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.chip-programada,
+.chip-info {
+  background: var(--azul-claro);
+  color: var(--azul-oscuro);
+}
+
+.chip-atendida,
+.chip-exito {
+  background: var(--exito-claro);
+  color: var(--exito);
+}
+
+.chip-cancelada,
+.chip-neutro {
+  background: var(--neutro-claro);
+  color: var(--neutro);
+}
+
+.chip-aviso {
+  background: var(--aviso-claro);
+  color: var(--aviso);
+}
+
+.alerta {
+  padding: var(--espacio-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radio-sm);
+  margin-bottom: var(--espacio-md);
+}
+
+.alerta-error {
+  background: var(--peligro-claro);
+  border-color: #f0c9c7;
+  color: var(--peligro);
+}
+
+/* ---------- 7. Tablas ---------- */
+.tabla-contenedor {
+  overflow-x: auto;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+}
+
+.tabla th,
+.tabla td {
+  padding: 12px var(--espacio-sm);
+  text-align: left;
+  border-bottom: 1px solid var(--borde);
+  white-space: nowrap;
+}
+
+.tabla th {
+  background: var(--fondo);
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tabla tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla tbody tr:hover {
+  background: var(--fondo);
+}
+
+/* ---------- 8. Estados: vacío y carga ---------- */
+.estado-vacio {
+  padding: var(--espacio-lg) var(--espacio-md);
+  text-align: center;
+  color: var(--texto-suave);
+  background: var(--superficie);
+  border: 1px dashed var(--borde);
+  border-radius: var(--radio);
+}
+
+.esqueleto {
+  border-radius: var(--radio);
+  background: linear-gradient(90deg, var(--neutro-claro) 25%, #f7f9fa 50%, var(--neutro-claro) 75%);
+  background-size: 200% 100%;
+  animation: brillo 1.4s ease-in-out infinite;
+}
+
+@keyframes brillo {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ---------- 9. Utilidades ---------- */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

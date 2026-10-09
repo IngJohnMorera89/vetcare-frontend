@@ -1,33 +1,107 @@
-.hero {
-  max-width: 640px;
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(160deg, var(--azul-claro) 0%, var(--fondo) 55%);
+}
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(1120px, 100%);
   margin: 0 auto;
-  padding: var(--espacio-lg) var(--espacio-md);
-  text-align: center;
+  padding: var(--espacio-md);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--azul-profundo);
+  font-size: var(--texto-lg);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+main {
+  flex: 1;
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 0 var(--espacio-md);
+}
+
+.hero {
+  max-width: 720px;
+  padding: var(--espacio-xl) 0 var(--espacio-lg);
+}
+
+.hero-etiqueta {
+  display: inline-block;
+  margin-bottom: var(--espacio-sm);
+  padding: 4px 12px;
+  border-radius: var(--radio-pildora);
+  background: var(--superficie);
+  color: var(--azul-principal);
+  font-size: var(--texto-sm);
+  font-weight: 700;
 }
 
 .hero-titulo {
-  font-size: 2.4rem;
-  color: var(--azul-oscuro);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin-bottom: var(--espacio-sm);
 }
 
 .hero-texto {
-  font-size: 1.1rem;
-  color: var(--texto-suave);
+  max-width: 60ch;
   margin-bottom: var(--espacio-md);
+  color: var(--texto-suave);
+  font-size: var(--texto-lg);
 }
 
-.boton {
-  display: inline-block;
-  background: var(--azul-principal);
-  color: #ffffff;
-  text-decoration: none;
-  padding: var(--espacio-xs) var(--espacio-md);
+.btn-grande {
+  padding: 14px 28px;
+  font-size: var(--texto-base);
+}
+
+.beneficios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--espacio-md);
+  padding-bottom: var(--espacio-xl);
+}
+
+.beneficio {
+  padding: var(--espacio-md);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
   border-radius: var(--radio);
-  font-weight: 600;
-  transition: background 0.2s ease;
+  box-shadow: var(--sombra);
 }
 
-.boton:hover {
-  background: var(--azul-oscuro);
+.beneficio-icono {
+  display: inline-flex;
+  margin-bottom: var(--espacio-sm);
+  padding: 10px;
+  border-radius: var(--radio-sm);
+  background: var(--azul-claro);
+  color: var(--azul-principal);
+}
+
+.beneficio-titulo {
+  font-size: var(--texto-lg);
+  margin-bottom: 6px;
+}
+
+.beneficio-texto {
+  color: var(--texto-suave);
+}
+
+.pie {
+  padding: var(--espacio-md);
+  text-align: center;
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
 }

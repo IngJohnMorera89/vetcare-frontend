@@ -1,32 +1,66 @@
-<nav class="barra">
-  <a routerLink="/" class="marca">🐾 VetCare</a>
-
-  @if (authService.sesionActiva()) {
-    <div class="barra-links">
-      <a routerLink="/agenda" class="barra-link">Agenda</a>
-      <a routerLink="/mascotas" class="barra-link">
-        Mascotas
-        @if (totalFavoritos() > 0) {
-          <span class="badge">{{ totalFavoritos() }}</span>
-        }
+@if (authService.sesionActiva()) {
+  <div class="app" [class.menu-abierto]="menuAbierto()">
+    <aside class="lateral" id="menu-lateral">
+      <a [routerLink]="authService.rutaInicial()" class="marca" (click)="cerrarMenu()">
+        <img src="favicon.svg" alt="" width="32" height="32">
+        <span>VetCare</span>
       </a>
-      @if (puedeVerDuenos()) {
-        <a routerLink="/duenos" class="barra-link">Dueños</a>
-      }
-    </div>
 
-    <div class="barra-usuario">
-      <span class="saludo">Hola, <strong>{{ authService.nombre() }}</strong></span>
-      <span class="rol-chip">{{ etiquetaRol() }}</span>
-      <button type="button" class="boton-salir" (click)="authService.cerrarSesion()">
-        Cerrar sesión
+      <nav class="menu" aria-label="Menú principal">
+        @for (enlace of enlaces(); track enlace.ruta) {
+          <a
+            [routerLink]="enlace.ruta"
+            routerLinkActive="activo"
+            class="menu-enlace"
+            (click)="cerrarMenu()">
+            <app-icono [nombre]="enlace.icono" />
+            <span>{{ enlace.texto }}</span>
+            @if (enlace.ruta === '/mascotas' && totalFavoritos() > 0) {
+              <span class="badge" aria-label="pacientes destacados">{{ totalFavoritos() }}</span>
+            }
+          </a>
+        }
+      </nav>
+
+      <button type="button" class="salir" (click)="authService.cerrarSesion()">
+        <app-icono nombre="salir" />
+        <span>Cerrar sesión</span>
       </button>
-    </div>
-  } @else {
-    <a routerLink="/login" class="barra-link">Iniciar sesión</a>
-  }
-</nav>
+    </aside>
 
-<main class="contenido">
-  <router-outlet></router-outlet>
-</main>
+    <div class="fondo-menu" (click)="cerrarMenu()" aria-hidden="true"></div>
+
+    <div class="principal">
+      <header class="barra-superior">
+        <button
+          type="button"
+          class="boton-menu"
+          aria-controls="menu-lateral"
+          [attr.aria-expanded]="menuAbierto()"
+          aria-label="Abrir menú"
+          (click)="alternarMenu()">
+          <app-icono nombre="menu" />
+        </button>
+
+        <p class="fecha-hoy">{{ hoy }}</p>
+
+        <div class="usuario">
+          <div class="usuario-texto">
+            <strong>{{ authService.nombre() }}</strong>
+            <span>{{ etiquetaRol() }}</span>
+          </div>
+          <span class="avatar" aria-hidden="true">{{ iniciales() }}</span>
+        </div>
+      </header>
+
+      <main class="contenido">
+        <router-outlet />
+      </main>
+    </div>
+  </div>
+} @else {
+  <router-outlet />
+}
+
+<app-notificaciones />
+<app-dialogo-confirmacion />

@@ -1,0 +1,43 @@
+.notificaciones {
+    position: fixed;
+    right: var(--espacio-sm);
+    bottom: var(--espacio-sm);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-xs);
+    width: min(380px, calc(100vw - 32px));}
+  .notificacion {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: var(--radio-sm);
+    border-left: 4px solid currentColor;
+    background: var(--superficie);
+    box-shadow: var(--sombra-lg);
+    animation: entrar 0.25s ease-out;}
+  .notificacion-exito {
+    color: var(--exito);}
+  .notificacion-error {
+    color: var(--peligro);}
+  .notificacion-info {
+    color: var(--azul-principal);}
+  .notificacion-texto {
+    flex: 1;
+    color: var(--texto);
+    font-size: var(--texto-sm);
+    font-weight: 600;}
+  .notificacion-cerrar {
+    border: none;
+    background: transparent;
+    color: var(--texto-suave);
+    cursor: pointer;}
+  @keyframes entrar {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }to {
+      opacity: 1;
+      transform: translateY(0);
+    }}

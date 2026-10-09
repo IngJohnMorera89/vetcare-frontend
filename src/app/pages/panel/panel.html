@@ -1,0 +1,75 @@
+<header class="encabezado-pagina">
+    <div>
+      <h1 class="titulo-pagina">Panel de la clínica</h1>
+      <p class="subtitulo">Así va el negocio hoy y en lo que va del mes</p>
+    </div>
+    <a routerLink="/agenda" class="btn btn-secundario">Ver agenda de hoy</a>
+  </header>
+  
+  <section class="indicadores" aria-label="Indicadores principales">
+    <article class="indicador">
+      <p class="indicador-titulo">Citas de hoy</p>
+      <p class="indicador-valor">{{ citasHoy().length }}</p>
+      <p class="indicador-detalle">{{ pendientesHoy().length }} por atender</p>
+    </article>
+    <article class="indicador indicador-principal">
+      <p class="indicador-titulo">Ingresos del mes</p>
+      <p class="indicador-valor">{{ pesos(ingresosMes()) }}</p>
+      <p class="indicador-detalle">{{ atencionesMes() }} atenciones cobradas</p>
+    </article>
+    <article class="indicador">
+      <p class="indicador-titulo">Pacientes</p>
+      <p class="indicador-valor">{{ totalPacientes() }}</p>
+      <p class="indicador-detalle">de {{ totalDuenos() }} familias</p>
+    </article>
+    <article class="indicador">
+      <p class="indicador-titulo">Cancelación del mes</p>
+      <p class="indicador-valor">{{ tasaCancelacion() }} %</p>
+      <p class="indicador-detalle">de las citas agendadas</p>
+    </article>
+  </section>
+  
+  <div class="panel-cuerpo">
+    <section class="tarjeta" aria-labelledby="titulo-grafica">
+      <div class="tarjeta-encabezado">
+        <h2 id="titulo-grafica" class="titulo-seccion">Ingresos de los últimos 7 días</h2>
+        <p class="total-semana">{{ pesos(totalSemana()) }}</p>
+      </div>
+  
+      <ol class="grafica">
+        @for (dia of ingresosSemana(); track dia.fecha) {
+          <li class="columna" tabindex="0" [attr.aria-label]="dia.etiqueta + ': ' + pesos(dia.total)">
+            <span class="columna-valor">{{ pesos(dia.total) }}</span>
+            <span class="columna-pista">
+              <span class="columna-barra" [style.height.%]="dia.porcentaje"></span>
+            </span>
+            <span class="columna-etiqueta" [class.es-hoy]="dia.fecha === hoy">{{ dia.etiqueta }}</span>
+          </li>
+        }
+      </ol>
+    </section>
+  
+    <section class="tarjeta" aria-labelledby="titulo-equipo">
+      <h2 id="titulo-equipo" class="titulo-seccion">Equipo médico este mes</h2>
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th scope="col">Veterinario</th>
+            <th scope="col">Atendidas</th>
+            <th scope="col">Pendientes</th>
+            <th scope="col">Ingresos</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (fila of rendimiento(); track fila.nombre) {
+            <tr>
+              <td><strong>{{ fila.nombre }}</strong></td>
+              <td>{{ fila.atendidas }}</td>
+              <td>{{ fila.pendientes }}</td>
+              <td>{{ pesos(fila.ingresos) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  </div>

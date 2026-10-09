@@ -1,8 +1,10 @@
 import { Injectable, signal, inject, effect } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { API_URL } from '../core/api';
 import { mensajeDeError } from '../core/errores';
 import { AuthService } from './auth.service';
+import { NotificacionesService } from './notificaciones.service';
 
 export type EstadoCita = 'PROGRAMADA' | 'ATENDIDA' | 'CANCELADA';
 
@@ -41,6 +43,7 @@ export interface Atencion {
 export class CitasService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
+  private notificaciones = inject(NotificacionesService);
   private apiUrl = `${API_URL}/citas`;
 
   private listaCitas = signal<Cita[]>([]);
@@ -83,30 +86,41 @@ export class CitasService {
     });
   }
 
+  // GET /api/citas/mascota/{id}: la historia clínica, de la más reciente a la más antigua
+  historiaDe(mascotaId: number): Observable<Cita[]> {
+    return this.http.get<Cita[]>(`${this.apiUrl}/mascota/${mascotaId}`);
+  }
+
   // POST /api/citas (recepción y admin)
   agendar(nueva: NuevaCita) {
-    this.errorSignal.set(null);
     this.http.post<Cita>(this.apiUrl, nueva).subscribe({
-      next: (creada) => this.listaCitas.update(actuales => [...actuales, creada]),
-      error: (error: HttpErrorResponse) => this.errorSignal.set(mensajeDeError(error))
+      next: (creada) => {
+        this.listaCitas.update(actuales => [...actuales, creada]);
+        this.notificaciones.exito(`Cita de ${creada.mascotaNombre} agendada a las ${creada.hora.slice(0, 5)}.`);
+      },
+      error: (error: HttpErrorResponse) => this.notificaciones.error(mensajeDeError(error))
     });
   }
 
   // PATCH /api/citas/{id}/atender (solo el veterinario de esa cita)
   atender(id: number, atencion: Atencion) {
-    this.errorSignal.set(null);
     this.http.patch<Cita>(`${this.apiUrl}/${id}/atender`, atencion).subscribe({
-      next: (actualizada) => this.reemplazar(actualizada),
-      error: (error: HttpErrorResponse) => this.errorSignal.set(mensajeDeError(error))
+      next: (actualizada) => {
+        this.reemplazar(actualizada);
+        this.notificaciones.exito(`Atención de ${actualizada.mascotaNombre} registrada.`);
+      },
+      error: (error: HttpErrorResponse) => this.notificaciones.error(mensajeDeError(error))
     });
   }
 
   // PATCH /api/citas/{id}/cancelar (recepción y admin)
   cancelar(id: number) {
-    this.errorSignal.set(null);
     this.http.patch<Cita>(`${this.apiUrl}/${id}/cancelar`, {}).subscribe({
-      next: (actualizada) => this.reemplazar(actualizada),
-      error: (error: HttpErrorResponse) => this.errorSignal.set(mensajeDeError(error))
+      next: (actualizada) => {
+        this.reemplazar(actualizada);
+        this.notificaciones.info(`Cita de ${actualizada.mascotaNombre} cancelada.`);
+      },
+      error: (error: HttpErrorResponse) => this.notificaciones.error(mensajeDeError(error))
     });
   }
 

@@ -1,0 +1,14 @@
+<dialog
+  #dialogo
+  class="dialogo"
+  aria-labelledby="dialogo-titulo"
+  (cancel)="responder(false)">
+  @if (peticion(); as p) {
+    <h2 id="dialogo-titulo" class="dialogo-titulo">{{ p.titulo }}</h2>
+    <p class="dialogo-mensaje">{{ p.mensaje }}</p>
+    <div class="dialogo-acciones">
+      <button type="button" class="btn btn-secundario" (click)="responder(false)">Volver</button>
+      <button type="button" class="btn btn-peligro" (click)="responder(true)">{{ p.textoConfirmar }}</button>
+    </div>
+  }
+</dialog>

@@ -1,25 +1,83 @@
+<a routerLink="/mascotas" class="volver">
+  <app-icono nombre="anterior" [tamano]="18" />
+  Volver a pacientes
+</a>
+
 @if (mascota(); as m) {
-  <section class="detalle">
-    <div class="detalle-foto-contenedor">
-      <img class="detalle-foto" [src]="m.foto" [alt]="'Foto de ' + m.nombre">
+  <section class="ficha tarjeta">
+    <div class="ficha-foto">
+      <img [src]="m.foto" [alt]="'Foto de ' + m.nombre">
       <button
         class="favorito-boton-detalle"
         type="button"
         [attr.aria-pressed]="esFavorito()"
-        [attr.aria-label]="esFavorito() ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+        [attr.aria-label]="esFavorito() ? 'Quitar de destacados' : 'Marcar como destacado'"
         (click)="alternarFavorito()">
         <span class="favorito-icono" [class.activo]="esFavorito()">♥</span>
       </button>
     </div>
-    <div class="detalle-info">
-      <h1 class="detalle-nombre">{{ m.nombre }}</h1>
-      <p class="detalle-dato"><strong>Especie:</strong> {{ m.especie }}</p>
-      <p class="detalle-dato"><strong>Raza:</strong> {{ m.raza || 'Sin registrar' }}</p>
-      <p class="detalle-dato"><strong>Edad:</strong> {{ m.edad }} años</p>
-      <p class="detalle-dato"><strong>Dueño:</strong> {{ m.dueno }}</p>
-      <a routerLink="/mascotas" class="volver">← Volver al listado</a>
+
+    <div class="ficha-info">
+      <h1 class="titulo-pagina">{{ m.nombre }}</h1>
+      <dl class="datos">
+        <div>
+          <dt>Especie</dt>
+          <dd>{{ m.especie }}</dd>
+        </div>
+        <div>
+          <dt>Raza</dt>
+          <dd>{{ m.raza || 'Sin registrar' }}</dd>
+        </div>
+        <div>
+          <dt>Edad</dt>
+          <dd>{{ m.edad }} {{ m.edad === 1 ? 'año' : 'años' }}</dd>
+        </div>
+        <div>
+          <dt>Dueño</dt>
+          <dd>{{ m.dueno }}</dd>
+        </div>
+        <div>
+          <dt>Última atención</dt>
+          <dd>{{ ultimaVisita() ? fechaLarga(ultimaVisita()!.fecha) : 'Sin atenciones' }}</dd>
+        </div>
+      </dl>
     </div>
   </section>
+
+  <section class="historia" aria-labelledby="titulo-historia">
+    <h2 id="titulo-historia" class="titulo-seccion">
+      <app-icono nombre="historia" />
+      Historia clínica
+    </h2>
+
+    @if (cargandoHistoria()) {
+      <div class="esqueleto evento-esqueleto"></div>
+      <div class="esqueleto evento-esqueleto"></div>
+    } @else {
+      <ol class="linea-tiempo">
+        @for (cita of historia(); track cita.id) {
+          <li class="evento" [class]="'evento-' + cita.estado.toLowerCase()">
+            <div class="evento-encabezado">
+              <time [attr.datetime]="cita.fecha">{{ fechaLarga(cita.fecha) }} · {{ cita.hora.slice(0, 5) }}</time>
+              <span class="chip" [class]="'chip-' + cita.estado.toLowerCase()">{{ cita.estado }}</span>
+            </div>
+            <p class="evento-motivo">{{ cita.motivo }}</p>
+            <p class="evento-detalle">{{ cita.estado === 'ATENDIDA' ? 'Atendió' : 'Veterinario' }}: {{ cita.veterinarioNombre }}</p>
+            @if (cita.notas) {
+              <p class="evento-notas">{{ cita.notas }}</p>
+            }
+            @if (cita.costo !== null) {
+              <p class="evento-detalle">Costo: {{ pesos(cita.costo) }}</p>
+            }
+          </li>
+        } @empty {
+          <li class="estado-vacio">{{ m.nombre }} todavía no tiene citas registradas.</li>
+        }
+      </ol>
+    }
+  </section>
+} @else if (cargandoMascotas()) {
+  <div class="esqueleto ficha-esqueleto"></div>
 } @else {
-  <p class="sin-resultado">No se encontró la mascota solicitada.</p>
+  <p class="estado-vacio">No encontramos ese paciente. Puede que haya sido eliminado.</p>
 }

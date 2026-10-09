@@ -1,0 +1,129 @@
+<header class="encabezado-pagina">
+    <div>
+      <h1 class="titulo-pagina">Personal</h1>
+      <p class="subtitulo">Equipo médico y cuentas de acceso a VetCare</p>
+    </div>
+  </header>
+  
+  <div class="secciones">
+    <!-- ---------- Equipo médico ---------- -->
+    <section class="tarjeta" aria-labelledby="titulo-vets">
+      <h2 id="titulo-vets" class="titulo-seccion">Equipo médico</h2>
+  
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th scope="col">Veterinario</th>
+              <th scope="col">Especialidad</th>
+              <th scope="col">Tarjeta</th>
+              <th scope="col">Cuenta</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (v of veterinarios(); track v.id) {
+              <tr>
+                <td><strong>{{ v.nombre }}</strong></td>
+                <td>{{ v.especialidad || '—' }}</td>
+                <td>{{ v.tarjetaProfesional }}</td>
+                <td>
+                  @if (usuarioDe(v.id); as usuario) {
+                    <span class="chip chip-exito">{{ usuario }}</span>
+                  } @else {
+                    <span class="chip chip-aviso">Sin cuenta</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+  
+      <details class="plegable interno">
+        <summary>Agregar veterinario</summary>
+        <form class="formulario-grid" (submit)="crearVeterinario($event)">
+          <label class="campo">
+            <span>Nombre completo</span>
+            <input name="nombre" type="text" required>
+          </label>
+          <label class="campo">
+            <span>Especialidad</span>
+            <input name="especialidad" type="text" placeholder="Ej: Felinos">
+          </label>
+          <label class="campo">
+            <span>Tarjeta profesional</span>
+            <input name="tarjeta" type="text" placeholder="TP-0000" required>
+          </label>
+          <button type="submit" class="btn btn-primario">Agregar</button>
+        </form>
+      </details>
+    </section>
+  
+    <!-- ---------- Cuentas de acceso ---------- -->
+    <section class="tarjeta" aria-labelledby="titulo-cuentas">
+      <h2 id="titulo-cuentas" class="titulo-seccion">Cuentas de acceso</h2>
+  
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Usuario</th>
+              <th scope="col">Rol</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of cuentas(); track c.id) {
+              <tr>
+                <td><strong>{{ c.nombre || '—' }}</strong></td>
+                <td>{{ c.username }}</td>
+                <td><span class="chip chip-info">{{ nombresDeRol[c.rol] }}</span></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+  
+      <details class="plegable interno">
+        <summary>Crear cuenta</summary>
+        <form class="formulario-grid" (submit)="crearCuenta($event)">
+          <label class="campo">
+            <span>Nombre de la persona</span>
+            <input name="nombre" type="text" required>
+          </label>
+          <label class="campo">
+            <span>Usuario</span>
+            <input name="username" type="text" autocomplete="off" pattern="[a-z0-9.]{3,30}" title="Minúsculas, números y puntos (3 a 30)" required>
+          </label>
+          <label class="campo">
+            <span>Contraseña temporal</span>
+            <input name="password" type="password" autocomplete="new-password" minlength="6" required>
+            <small class="campo-ayuda">Mínimo 6 caracteres. Entrégala en persona, nunca por chat.</small>
+          </label>
+          <label class="campo">
+            <span>Rol</span>
+            <select #selectRol name="rol" required (change)="cambiarRol(selectRol.value)">
+              <option value="RECEPCIONISTA">Recepción</option>
+              <option value="VETERINARIO">Veterinario</option>
+              <option value="ADMIN">Administración</option>
+            </select>
+          </label>
+          @if (rolNuevaCuenta() === 'VETERINARIO') {
+            <label class="campo">
+              <span>¿Qué veterinario es?</span>
+              <select name="veterinarioId" required>
+                <option value="" disabled selected>Elige un veterinario</option>
+                @for (v of veterinariosSinCuenta(); track v.id) {
+                  <option [value]="v.id">{{ v.nombre }}</option>
+                }
+              </select>
+              @if (veterinariosSinCuenta().length === 0) {
+                <small class="campo-ayuda">Todos los veterinarios ya tienen cuenta. Agrega uno primero.</small>
+              }
+            </label>
+          }
+          <button type="submit" class="btn btn-primario">Crear cuenta</button>
+        </form>
+      </details>
+    </section>
+  </div>

@@ -1,269 +1,186 @@
-.agenda-encabezado {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--espacio-sm);
-    margin-bottom: var(--espacio-md);
+.navegacion-dia {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.selector-dia {
+  padding: 8px 10px;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-sm);
+  background: var(--superficie);
+}
+
+/* ---------- Resumen ---------- */
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: var(--espacio-sm);
+  margin-bottom: var(--espacio-md);
+}
+
+.resumen-tarjeta {
+  display: flex;
+  flex-direction: column;
+  padding: var(--espacio-sm) var(--espacio-md);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.resumen-numero {
+  font-size: var(--texto-xl);
+  font-weight: 800;
+  color: var(--azul-profundo);
+}
+
+.resumen-texto {
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.resumen-destacada {
+  background: var(--azul-principal);
+  border-color: var(--azul-principal);
+}
+
+.resumen-destacada .resumen-numero,
+.resumen-destacada .resumen-texto {
+  color: #ffffff;
+}
+
+/* ---------- Cuerpo: lista + formulario lateral ---------- */
+.agenda-cuerpo {
+  display: grid;
+  gap: var(--espacio-md);
+  align-items: start;
+}
+
+.agenda-cuerpo.con-formulario {
+  grid-template-columns: 1fr 320px;
+}
+
+.formulario-agendar {
+  position: sticky;
+  top: 88px;
+}
+
+.formulario-columna {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-sm);
+}
+
+/* ---------- Citas ---------- */
+.lista-citas {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-sm);
+}
+
+.fila-esqueleto {
+  height: 88px;
+  margin-bottom: var(--espacio-sm);
+}
+
+.cita {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: var(--espacio-sm);
+  padding: var(--espacio-sm) var(--espacio-md);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--azul-principal);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.cita-atendida {
+  border-left-color: var(--exito);
+}
+
+.cita-cancelada {
+  border-left-color: var(--neutro);
+  opacity: 0.7;
+}
+
+.cita-hora {
+  font-size: var(--texto-lg);
+  font-weight: 800;
+  color: var(--azul-profundo);
+}
+
+.cita-titulo {
+  font-weight: 700;
+}
+
+.cita-titulo a {
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.cita-titulo a:hover {
+  color: var(--azul-principal);
+  text-decoration: underline;
+}
+
+.cita-especie {
+  font-weight: 400;
+  color: var(--texto-suave);
+}
+
+.cita-detalle {
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.cita-notas {
+  margin-top: var(--espacio-xs);
+  padding: var(--espacio-xs) var(--espacio-sm);
+  background: var(--azul-claro);
+  border-radius: var(--radio-sm);
+  font-size: var(--texto-sm);
+}
+
+.cita-lado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--espacio-xs);
+}
+
+.form-atencion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-xs);
+  margin-top: var(--espacio-sm);
+}
+
+.acciones {
+  display: flex;
+  gap: var(--espacio-xs);
+}
+
+@media (max-width: 1000px) {
+  .agenda-cuerpo.con-formulario {
+    grid-template-columns: 1fr;
   }
-  
-  .titulo-pagina {
-    color: var(--azul-oscuro);
+
+  .formulario-agendar {
+    position: static;
+    order: -1;
   }
-  
-  .subtitulo {
-    color: var(--texto-suave);
-  }
-  
-  .campo-fecha {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--texto-suave);
-  }
-  
-  /* --- Tarjetas de resumen --- */
-  .resumen {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: var(--espacio-sm);
-    margin-bottom: var(--espacio-md);
-  }
-  
-  .resumen-tarjeta {
-    display: flex;
-    flex-direction: column;
-    padding: var(--espacio-sm) var(--espacio-md);
-    background: var(--superficie);
-    border: 1px solid var(--borde);
-    border-radius: var(--radio);
-    box-shadow: var(--sombra);
-  }
-  
-  .resumen-numero {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: var(--azul-oscuro);
-  }
-  
-  .resumen-texto {
-    color: var(--texto-suave);
-    font-size: 0.9rem;
-  }
-  
-  .resumen-destacada {
-    background: var(--azul-principal);
-    border-color: var(--azul-principal);
-  }
-  
-  .resumen-destacada .resumen-numero,
-  .resumen-destacada .resumen-texto {
-    color: #ffffff;
-  }
-  
-  /* --- Lista de citas --- */
-  .lista-citas {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: var(--espacio-sm);
-  }
-  
+}
+
+@media (max-width: 560px) {
   .cita {
-    display: grid;
-    grid-template-columns: 64px 1fr auto;
-    gap: var(--espacio-sm);
-    align-items: start;
-    padding: var(--espacio-sm) var(--espacio-md);
-    background: var(--superficie);
-    border: 1px solid var(--borde);
-    border-left: 4px solid var(--azul-principal);
-    border-radius: var(--radio);
-    box-shadow: var(--sombra);
+    grid-template-columns: 1fr;
   }
-  
-  .cita-atendida {
-    border-left-color: #2f9e6e;
-  }
-  
-  .cita-cancelada {
-    border-left-color: #b0b8bf;
-    opacity: 0.7;
-  }
-  
-  .cita-hora {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--azul-oscuro);
-  }
-  
-  .cita-titulo {
-    font-weight: 700;
-  }
-  
-  .cita-especie {
-    font-weight: 400;
-    color: var(--texto-suave);
-  }
-  
-  .cita-detalle {
-    color: var(--texto-suave);
-    font-size: 0.95rem;
-  }
-  
-  .cita-notas {
-    margin-top: var(--espacio-xs);
-    padding: var(--espacio-xs) var(--espacio-sm);
-    background: var(--azul-claro);
-    border-radius: 8px;
-    font-size: 0.95rem;
-  }
-  
+
   .cita-lado {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: var(--espacio-xs);
+    flex-direction: row;
+    align-items: center;
   }
-  
-  /* --- Chip de estado --- */
-  .chip {
-    padding: 2px 10px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
-  
-  .chip-programada {
-    background: var(--azul-claro);
-    color: var(--azul-oscuro);
-  }
-  
-  .chip-atendida {
-    background: #e3f5ec;
-    color: #1f7a52;
-  }
-  
-  .chip-cancelada {
-    background: #eef0f2;
-    color: #5f6b75;
-  }
-  
-  /* --- Formulario de atención (veterinario) --- */
-  .form-atencion {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espacio-xs);
-    margin-top: var(--espacio-sm);
-  }
-  
-  .campo-fecha input,
-  .form-atencion textarea,
-  .form-atencion input {
-    padding: var(--espacio-xs) var(--espacio-sm);
-    border: 1px solid var(--borde);
-    border-radius: var(--radio);
-    font-family: inherit;
-    font-size: 1rem;
-    color: var(--texto);
-  }
-  
-  .acciones {
-    display: flex;
-    gap: var(--espacio-xs);
-  }
-  
-  /* --- Botones --- */
-  .boton,
-  .boton-secundario,
-  .boton-peligro {
-    padding: 6px var(--espacio-sm);
-    border-radius: var(--radio);
-    font-family: inherit;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  
-  .boton {
-    border: none;
-    background: var(--azul-principal);
-    color: #ffffff;
-  }
-  
-  .boton:hover {
-    background: var(--azul-oscuro);
-  }
-  
-  .boton-secundario {
-    border: 1px solid var(--borde);
-    background: var(--superficie);
-    color: var(--texto);
-  }
-  
-  .boton-peligro {
-    border: 1px solid #f0c9c7;
-    background: #fbeceb;
-    color: #b0413e;
-  }
-  
-  /* --- Estados y formulario (copiados de otras páginas: en la Clase 4 se vuelven globales) --- */
-  .estado-carga,
-  .sin-resultado {
-    color: var(--texto-suave);
-    padding: var(--espacio-md) 0;
-  }
-  
-  .estado-error {
-    color: #b0413e;
-    background: #fbeceb;
-    border: 1px solid #f0c9c7;
-    border-radius: var(--radio);
-    padding: var(--espacio-sm);
-    margin-bottom: var(--espacio-md);
-  }
-  
-  .registro {
-    margin-top: var(--espacio-lg);
-    padding: var(--espacio-md);
-    background: var(--superficie);
-    border: 1px solid var(--borde);
-    border-radius: var(--radio);
-    box-shadow: var(--sombra);
-  }
-  
-  .registro-titulo {
-    color: var(--azul-oscuro);
-    margin-bottom: var(--espacio-sm);
-  }
-  
-  .registro-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--espacio-sm);
-  }
-  
-  .registro-form input,
-  .registro-form select {
-    flex: 1 1 160px;
-    padding: var(--espacio-xs) var(--espacio-sm);
-    border: 1px solid var(--borde);
-    border-radius: var(--radio);
-    font-family: inherit;
-    font-size: 1rem;
-    color: var(--texto);
-  }
-  
-  .registro-boton {
-    padding: var(--espacio-xs) var(--espacio-md);
-    border: none;
-    border-radius: var(--radio);
-    background: var(--azul-principal);
-    color: #ffffff;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
+}

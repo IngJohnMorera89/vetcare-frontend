@@ -1,9 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Icono } from '../../components/icono/icono';
+import { leerCampo } from '../../core/formularios';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [RouterLink, Icono],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -11,21 +14,16 @@ export class Login {
   private authService = inject(AuthService);
 
   error = this.authService.error;
+  cargando = this.authService.cargando;
+  mostrarClave = signal(false);
 
-  ingresar(
-    evento: SubmitEvent,
-    inputUsername: HTMLInputElement,
-    inputPassword: HTMLInputElement
-  ) {
+  ingresar(evento: SubmitEvent) {
     evento.preventDefault();
-
-    if (!inputUsername.value || !inputPassword.value) {
-      return;
-    }
+    const datos = new FormData(evento.target as HTMLFormElement);
 
     this.authService.iniciarSesion({
-      username: inputUsername.value,
-      password: inputPassword.value
+      username: leerCampo(datos, 'username'),
+      password: leerCampo(datos, 'password')
     });
   }
 }

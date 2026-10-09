@@ -1,0 +1,29 @@
+.dialogo {
+  width: min(440px, calc(100vw - 32px));
+  margin: auto;
+  padding: var(--espacio-md);
+  border: none;
+  border-radius: var(--radio);
+  box-shadow: var(--sombra-lg);
+}
+
+.dialogo::backdrop {
+  background: rgba(20, 62, 82, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.dialogo-titulo {
+  font-size: var(--texto-lg);
+  margin-bottom: var(--espacio-xs);
+}
+
+.dialogo-mensaje {
+  color: var(--texto-suave);
+  margin-bottom: var(--espacio-md);
+}
+
+.dialogo-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--espacio-xs);
+}

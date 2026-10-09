@@ -1,87 +1,158 @@
-.detalle {
-  display: flex;
-  gap: var(--espacio-lg);
-  background: var(--superficie);
-  border: 1px solid var(--borde);
-  border-radius: var(--radio);
-  padding: var(--espacio-md);
-  box-shadow: var(--sombra);
-  flex-wrap: wrap;
+.volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: var(--espacio-md);
+  font-weight: 700;
+  text-decoration: none;
 }
 
-.detalle-foto {
-  width: 320px;
-  height: 240px;
+/* ---------- Ficha del paciente ---------- */
+.ficha {
+  display: grid;
+  grid-template-columns: minmax(240px, 360px) 1fr;
+  gap: var(--espacio-lg);
+  margin-bottom: var(--espacio-lg);
+}
+
+.ficha-foto {
+  position: relative;
+}
+
+.ficha-foto img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: var(--radio);
 }
 
-.detalle-info {
-  flex: 1;
-  min-width: 240px;
+.datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--espacio-sm);
+  margin-top: var(--espacio-sm);
 }
 
-.detalle-nombre {
-  color: var(--azul-oscuro);
-  margin-bottom: var(--espacio-sm);
+.datos dt {
+  color: var(--texto-suave);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.detalle-dato {
-  margin-bottom: var(--espacio-xs);
-  color: var(--texto);
-}
-
-.volver {
-  display: inline-block;
-  margin-top: var(--espacio-md);
-  color: var(--azul-principal);
-  text-decoration: none;
+.datos dd {
   font-weight: 600;
 }
 
-.volver:hover {
-  color: var(--azul-oscuro);
+.ficha-esqueleto {
+  height: 320px;
 }
 
-.sin-resultado {
-  text-align: center;
-  color: var(--texto-suave);
-  padding: var(--espacio-lg);
-}
-
-
-.detalle-foto-contenedor {
-  position: relative;
-}
-
+/* ---------- Favorito ---------- */
 .favorito-boton-detalle {
   position: absolute;
   top: var(--espacio-sm);
   right: var(--espacio-sm);
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border: none;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
   box-shadow: var(--sombra);
+  cursor: pointer;
 }
 
-.favorito-boton-detalle:focus-visible {
-  outline: 3px solid var(--azul-principal);
-  outline-offset: 2px;
-}
-
-.favorito-boton-detalle .favorito-icono {
-  font-size: 1.6rem;
+.favorito-icono {
+  font-size: 1.5rem;
   color: var(--borde);
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: color var(--transicion), transform var(--transicion);
 }
 
-.favorito-boton-detalle .favorito-icono.activo {
+.favorito-icono.activo {
   color: #e0446f;
   transform: scale(1.15);
+}
+
+/* ---------- Línea de tiempo de la historia ---------- */
+.titulo-seccion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.linea-tiempo {
+  list-style: none;
+  position: relative;
+  padding-left: var(--espacio-md);
+  border-left: 2px solid var(--borde);
+}
+
+.evento {
+  position: relative;
+  margin-bottom: var(--espacio-sm);
+  padding: var(--espacio-sm) var(--espacio-md);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+
+/* El punto de la línea de tiempo, dibujado solo con CSS */
+.evento::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: calc(-1 * var(--espacio-md) - 7px);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--azul-principal);
+  border: 2px solid var(--fondo);
+}
+
+.evento-atendida::before {
+  background: var(--exito);
+}
+
+.evento-cancelada::before {
+  background: var(--neutro);
+}
+
+.evento-encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-xs);
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.evento-motivo {
+  font-weight: 700;
+}
+
+.evento-detalle {
+  color: var(--texto-suave);
+  font-size: var(--texto-sm);
+}
+
+.evento-notas {
+  margin: 6px 0;
+  padding: var(--espacio-xs) var(--espacio-sm);
+  background: var(--azul-claro);
+  border-radius: var(--radio-sm);
+  font-size: var(--texto-sm);
+}
+
+.evento-esqueleto {
+  height: 96px;
+  margin-bottom: var(--espacio-sm);
+}
+
+@media (max-width: 760px) {
+  .ficha {
+    grid-template-columns: 1fr;
+  }
 }

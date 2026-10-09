@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { API_URL } from '../core/api';
 import { mensajeDeError } from '../core/errores';
 import { AuthService } from './auth.service';
+import { NotificacionesService } from './notificaciones.service';
 
 export interface Mascota {
   id: number;
@@ -29,6 +30,7 @@ export interface NuevaMascota {
 export class MascotasService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
+  private notificaciones = inject(NotificacionesService);
   private apiUrl = `${API_URL}/mascotas`;
 
   private listaMascotas = signal<Mascota[]>([]);
@@ -75,10 +77,9 @@ export class MascotasService {
     this.http.post<Mascota>(this.apiUrl, nueva).subscribe({
       next: (creada) => {
         this.listaMascotas.update(actuales => [...actuales, creada]);
+        this.notificaciones.exito(`${creada.nombre} ya es paciente de VetCare.`);
       },
-      error: (error: HttpErrorResponse) => {
-        this.errorSignal.set(mensajeDeError(error));
-      }
+      error: (error: HttpErrorResponse) => this.notificaciones.error(mensajeDeError(error))
     });
   }
 

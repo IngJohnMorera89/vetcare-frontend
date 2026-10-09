@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { API_URL } from '../core/api';
 import { mensajeDeError } from '../core/errores';
 import { AuthService } from './auth.service';
+import { NotificacionesService } from './notificaciones.service';
 
 export interface Dueno {
   id: number;
@@ -27,6 +28,7 @@ export interface NuevoDueno {
 export class DuenosService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
+  private notificaciones = inject(NotificacionesService);
   private apiUrl = `${API_URL}/duenos`;
 
   private listaDuenos = signal<Dueno[]>([]);
@@ -69,10 +71,20 @@ export class DuenosService {
     this.http.post<Dueno>(this.apiUrl, nuevo).subscribe({
       next: (creado) => {
         this.listaDuenos.update(actuales => [...actuales, creado]);
+        this.notificaciones.exito(`${creado.nombre} ${creado.apellido} quedó registrado.`);
       },
-      error: (error: HttpErrorResponse) => {
-        this.errorSignal.set(mensajeDeError(error));
-      }
+      error: (error: HttpErrorResponse) => this.notificaciones.error(mensajeDeError(error))
+    });
+  }
+
+  // DELETE /api/duenos/{id} (solo ADMIN; el backend responde 409 si tiene mascotas)
+  eliminarDueno(dueno: Dueno) {
+    this.http.delete<void>(`${this.apiUrl}/${dueno.id}`).subscribe({
+      next: () => {
+        this.listaDuenos.update(actuales => actuales.filter(d => d.id !== dueno.id));
+        this.notificaciones.exito(`${dueno.nombre} ${dueno.apellido} fue eliminado.`);
+      },
+      error: (error: HttpErrorResponse) => this.notificaciones.error(mensajeDeError(error))
     });
   }
 

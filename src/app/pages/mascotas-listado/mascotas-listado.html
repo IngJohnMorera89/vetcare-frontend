@@ -1,22 +1,46 @@
-<h1 class="titulo-pagina">Mascotas de VetCare</h1>
+<header class="encabezado-pagina">
+  <div>
+    <h1 class="titulo-pagina">Pacientes</h1>
+    <p class="subtitulo">{{ mascotas().length }} mascotas registradas en la clínica</p>
+  </div>
+</header>
 
-<input
-  #inputBusqueda
-  type="text"
-  class="buscador"
-  placeholder="Buscar mascota por nombre..."
-  (input)="busqueda.set(inputBusqueda.value)"
-/>
+<div class="filtros">
+  <label class="buscador">
+    <app-icono nombre="buscar" [tamano]="18" />
+    <span class="visualmente-oculto">Buscar paciente</span>
+    <input
+      #inputBusqueda
+      type="search"
+      placeholder="Buscar por nombre o dueño"
+      (input)="busqueda.set(inputBusqueda.value)">
+  </label>
 
-@if (cargando()) {
-  <p class="estado-carga">Cargando mascotas desde el servidor...</p>
-}
+  <div class="chips-filtro" role="group" aria-label="Filtrar por especie">
+    @for (especie of filtrosEspecie; track especie) {
+      <button
+        type="button"
+        class="chip-filtro"
+        [class.activo]="especieFiltro() === especie"
+        [attr.aria-pressed]="especieFiltro() === especie"
+        (click)="especieFiltro.set(especie)">
+        {{ especie }}
+      </button>
+    }
+  </div>
+</div>
 
 @if (error()) {
-  <p class="estado-error">{{ error() }}</p>
+  <p class="alerta alerta-error" role="alert">{{ error() }}</p>
 }
 
-@if (!cargando() && !error()) {
+@if (cargando()) {
+  <div class="grid">
+    <div class="esqueleto tarjeta-esqueleto"></div>
+    <div class="esqueleto tarjeta-esqueleto"></div>
+    <div class="esqueleto tarjeta-esqueleto"></div>
+  </div>
+} @else {
   <div class="grid">
     @for (m of mascotasFiltradas(); track m.id) {
       <a [routerLink]="['/mascotas', m.id]" class="card-link">
@@ -30,34 +54,51 @@
         </app-mascota-card>
       </a>
     } @empty {
-      <p class="sin-resultado">No encontramos mascotas con ese nombre.</p>
+      <p class="estado-vacio sin-resultado">No encontramos pacientes con ese filtro.</p>
     }
   </div>
 }
 
 @if (puedeRegistrar()) {
-<section class="registro">
-  <h2 class="registro-titulo">Registrar nueva mascota</h2>
-
-  @if (duenos().length === 0) {
-    <p class="estado-carga">
-      Todavía no hay dueños registrados. Ve a
-      <a routerLink="/duenos">Dueños</a> y registra uno primero.
-    </p>
-  } @else {
-    <form class="registro-form" (submit)="registrarMascota($event, inputNombre, inputEspecie, inputRaza, inputEdad, selectDueno)">
-      <input #inputNombre type="text" placeholder="Nombre" required>
-      <input #inputEspecie type="text" placeholder="Especie (Perro, Gato...)" required>
-      <input #inputRaza type="text" placeholder="Raza (opcional)">
-      <input #inputEdad type="number" placeholder="Edad" min="0">
-      <select #selectDueno required>
-        <option value="" disabled selected>Dueño...</option>
-        @for (d of duenos(); track d.id) {
-          <option [value]="d.id">{{ d.nombre }} {{ d.apellido }}</option>
-        }
-      </select>
-      <button type="submit" class="registro-boton">Registrar</button>
-    </form>
-  }
-</section>
+  <details class="plegable registro">
+    <summary>Registrar nuevo paciente</summary>
+    @if (duenos().length === 0) {
+      <p class="estado-vacio">
+        Primero registra al dueño en <a routerLink="/duenos">Dueños</a>.
+      </p>
+    } @else {
+      <form class="formulario-grid" (submit)="registrarMascota($event)">
+        <label class="campo">
+          <span>Nombre</span>
+          <input name="nombre" type="text" maxlength="60" required>
+        </label>
+        <label class="campo">
+          <span>Especie</span>
+          <select name="especie" required>
+            @for (especie of especies; track especie) {
+              <option [value]="especie">{{ especie }}</option>
+            }
+          </select>
+        </label>
+        <label class="campo">
+          <span>Raza <small>(opcional)</small></span>
+          <input name="raza" type="text" maxlength="60">
+        </label>
+        <label class="campo">
+          <span>Edad en años</span>
+          <input name="edad" type="number" min="0" max="40" value="0">
+        </label>
+        <label class="campo">
+          <span>Dueño</span>
+          <select name="duenoId" required>
+            <option value="" disabled selected>Elige un dueño</option>
+            @for (d of duenos(); track d.id) {
+              <option [value]="d.id">{{ d.nombre }} {{ d.apellido }}</option>
+            }
+          </select>
+        </label>
+        <button type="submit" class="btn btn-primario">Registrar paciente</button>
+      </form>
+    }
+  </details>
 }

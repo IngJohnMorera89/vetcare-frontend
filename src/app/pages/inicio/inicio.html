@@ -1,7 +1,33 @@
-<section class="hero">
-  <h1 class="hero-titulo">Bienvenido a VetCare</h1>
-  <p class="hero-texto">
-    El sistema para gestionar las mascotas y su atención en la clínica.
-  </p>
-  <a routerLink="/agenda" class="boton">Ir a la agenda</a>
-</section>
+<header class="encabezado">
+  <a routerLink="/" class="marca">
+    <img src="favicon.svg" alt="" width="32" height="32">
+    <span>VetCare</span>
+  </a>
+  <a routerLink="/login" class="btn btn-secundario">Iniciar sesión</a>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="hero-etiqueta">Software para clínicas veterinarias</p>
+    <h1 class="hero-titulo">Tu clínica, organizada de la recepción al consultorio.</h1>
+    <p class="hero-texto">
+      VetCare reúne agenda, pacientes, historia clínica e ingresos en un solo lugar.
+      Cada persona del equipo ve exactamente lo que necesita para su trabajo.
+    </p>
+    <a routerLink="/login" class="btn btn-primario btn-grande">Ingresar al sistema</a>
+  </section>
+
+  <section class="beneficios" aria-label="Qué ofrece VetCare">
+    @for (beneficio of beneficios; track beneficio.titulo) {
+      <article class="beneficio">
+        <span class="beneficio-icono"><app-icono [nombre]="beneficio.icono" [tamano]="24" /></span>
+        <h2 class="beneficio-titulo">{{ beneficio.titulo }}</h2>
+        <p class="beneficio-texto">{{ beneficio.texto }}</p>
+      </article>
+    }
+  </section>
+</main>
+
+<footer class="pie">
+  <p>© {{ anio }} VetCare · Proyecto académico Dev Senior Code</p>
+</footer>

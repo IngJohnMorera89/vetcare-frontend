@@ -1,27 +1,17 @@
 import { Component, inject, signal, computed } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CitasService, Cita } from '../../services/citas.services';
 import { MascotasService } from '../../services/mascotas.service';
 import { VeterinariosService } from '../../services/veterinarios.service';
-
-// Fecha de HOY en formato AAAA-MM-DD, según el reloj del computador (hora Colombia).
-// No usamos toISOString(): esa da la fecha en UTC y después de las 7 p. m. ya es "mañana".
-function hoyComoTexto(): string {
-  const hoy = new Date();
-  const mes = String(hoy.getMonth() + 1).padStart(2, '0');
-  const dia = String(hoy.getDate()).padStart(2, '0');
-  return `${hoy.getFullYear()}-${mes}-${dia}`;
-}
-
-const formatoPesos = new Intl.NumberFormat('es-CO', {
-  style: 'currency',
-  currency: 'COP',
-  maximumFractionDigits: 0
-});
+import { ConfirmacionService } from '../../services/confirmacion.service';
+import { Icono } from '../../components/icono/icono';
+import { leerCampo } from '../../core/formularios';
+import { fechaLarga, hoyComoTexto, pesos, sumarDias } from '../../core/formato';
 
 @Component({
   selector: 'app-agenda',
-  imports: [],
+  imports: [RouterLink, Icono],
   templateUrl: './agenda.html',
   styleUrl: './agenda.css'
 })
@@ -30,6 +20,7 @@ export class Agenda {
   private citasService = inject(CitasService);
   private mascotasService = inject(MascotasService);
   private veterinariosService = inject(VeterinariosService);
+  private confirmacion = inject(ConfirmacionService);
 
   citas = this.citasService.citas;
   cargando = this.citasService.cargando;
@@ -37,13 +28,17 @@ export class Agenda {
   mascotas = this.mascotasService.mascotas;
   veterinarios = this.veterinariosService.veterinarios;
 
-  // ¿Quién está mirando la agenda? Cada rol ve y puede hacer cosas distintas
   esVeterinario = computed(() => this.authService.rol() === 'VETERINARIO');
   esAdmin = computed(() => this.authService.rol() === 'ADMIN');
   puedeGestionar = computed(() => this.authService.tieneRol('ADMIN', 'RECEPCIONISTA'));
 
-  fechaSeleccionada = signal(hoyComoTexto());
+  hoy = hoyComoTexto();
+  fechaSeleccionada = signal(this.hoy);
   citaEnAtencion = signal<number | null>(null);
+
+  tituloDia = computed(() =>
+    this.fechaSeleccionada() === this.hoy ? 'Hoy' : fechaLarga(this.fechaSeleccionada())
+  );
 
   citasDelDia = computed(() =>
     this.citas()
@@ -65,63 +60,52 @@ export class Agenda {
       .reduce((total, cita) => total + (cita.costo ?? 0), 0)
   );
 
+  pesos = pesos;
+
   hora(cita: Cita): string {
     return cita.hora.slice(0, 5);
   }
 
-  pesos(valor: number): string {
-    return formatoPesos.format(valor);
+  moverDia(dias: number) {
+    this.fechaSeleccionada.set(sumarDias(this.fechaSeleccionada(), dias));
   }
 
-  agendar(
-    evento: SubmitEvent,
-    selectMascota: HTMLSelectElement,
-    selectVeterinario: HTMLSelectElement,
-    inputFecha: HTMLInputElement,
-    inputHora: HTMLInputElement,
-    inputMotivo: HTMLInputElement
-  ) {
+  agendar(evento: SubmitEvent) {
     evento.preventDefault();
-
-    if (!selectMascota.value || !selectVeterinario.value || !inputFecha.value
-        || !inputHora.value || !inputMotivo.value) {
-      return;
-    }
+    const formulario = evento.target as HTMLFormElement;
+    const datos = new FormData(formulario);
+    const fecha = leerCampo(datos, 'fecha');
 
     this.citasService.agendar({
-      mascotaId: Number(selectMascota.value),
-      veterinarioId: Number(selectVeterinario.value),
-      fecha: inputFecha.value,
-      hora: inputHora.value,
-      motivo: inputMotivo.value
+      mascotaId: Number(leerCampo(datos, 'mascotaId')),
+      veterinarioId: Number(leerCampo(datos, 'veterinarioId')),
+      fecha,
+      hora: leerCampo(datos, 'hora'),
+      motivo: leerCampo(datos, 'motivo')
     });
 
-    this.fechaSeleccionada.set(inputFecha.value);
-    (evento.target as HTMLFormElement).reset();
+    this.fechaSeleccionada.set(fecha);
+    formulario.reset();
   }
 
-  cancelar(cita: Cita) {
-    const confirmado = confirm(`¿Cancelar la cita de ${cita.mascotaNombre} a las ${this.hora(cita)}?`);
+  async cancelar(cita: Cita) {
+    const confirmado = await this.confirmacion.confirmar({
+      titulo: '¿Cancelar esta cita?',
+      mensaje: `La cita de ${cita.mascotaNombre} a las ${this.hora(cita)} quedará cancelada. Esta acción no se puede deshacer.`,
+      textoConfirmar: 'Sí, cancelar cita'
+    });
     if (confirmado) {
       this.citasService.cancelar(cita.id);
     }
   }
 
-  atender(
-    evento: SubmitEvent,
-    cita: Cita,
-    textareaNotas: HTMLTextAreaElement,
-    inputCosto: HTMLInputElement
-  ) {
+  atender(evento: SubmitEvent, cita: Cita) {
     evento.preventDefault();
-
-    if (!textareaNotas.value || !inputCosto.value) {
-      return;
-    }
+    const datos = new FormData(evento.target as HTMLFormElement);
 
     this.citasService.atender(cita.id, {
-      notas: textareaNotas.value,
-      costo: Number(inputCosto.value)
+      notas: leerCampo(datos, 'notas'),
+      costo: Number(leerCampo(datos, 'costo'))
     });
     this.citaEnAtencion.set(null);
   }

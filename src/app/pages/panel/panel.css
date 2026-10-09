@@ -1,0 +1,143 @@
+/* ---------- Indicadores ---------- */
+.indicadores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: var(--espacio-sm);
+    margin-bottom: var(--espacio-md);
+  }
+  
+  .indicador {
+    padding: var(--espacio-md);
+    background: var(--superficie);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+  }
+  
+  .indicador-titulo {
+    color: var(--texto-suave);
+    font-size: var(--texto-sm);
+    font-weight: 600;
+  }
+  
+  .indicador-valor {
+    font-size: var(--texto-xl);
+    font-weight: 800;
+    color: var(--azul-profundo);
+    line-height: 1.3;
+  }
+  
+  .indicador-detalle {
+    color: var(--texto-suave);
+    font-size: var(--texto-xs);
+  }
+  
+  .indicador-principal {
+    background: var(--azul-profundo);
+    border-color: var(--azul-profundo);
+  }
+  
+  .indicador-principal p {
+    color: #ffffff;
+  }
+  
+  /* ---------- Cuerpo ---------- */
+  .panel-cuerpo {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: var(--espacio-md);
+    align-items: start;
+  }
+  
+  .tarjeta-encabezado {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--espacio-sm);
+  }
+  
+  .total-semana {
+    font-weight: 800;
+    color: var(--azul-profundo);
+  }
+  
+  /* ---------- Gráfica de barras hecha con CSS ---------- */
+  .grafica {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    height: 240px;
+    margin-top: var(--espacio-lg);
+  }
+  
+  .columna {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border-radius: var(--radio-sm);
+    outline-offset: 2px;
+  }
+  
+  .columna-pista {
+    display: flex;
+    align-items: flex-end;
+    flex: 1;
+    width: 100%;
+    max-width: 44px;
+    border-bottom: 1px solid var(--borde);
+  }
+  
+  .columna-barra {
+    width: 100%;
+    min-height: 2px;
+    border-radius: 4px 4px 0 0;
+    background: var(--azul-principal);
+    transition: height 0.4s ease;
+  }
+  
+  .columna-etiqueta {
+    color: var(--texto-suave);
+    font-size: var(--texto-xs);
+    font-weight: 600;
+  }
+  
+  .columna-etiqueta.es-hoy {
+    color: var(--azul-profundo);
+    font-weight: 800;
+  }
+  
+  /* El valor aparece como globo al pasar el mouse o al enfocar con el teclado */
+  .columna-valor {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    padding: 4px 8px;
+    border-radius: var(--radio-sm);
+    background: var(--azul-profundo);
+    color: #ffffff;
+    font-size: var(--texto-xs);
+    font-weight: 700;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transicion);
+  }
+  
+  .columna:hover .columna-valor,
+  .columna:focus-visible .columna-valor {
+    opacity: 1;
+  }
+  
+  .columna:hover .columna-barra {
+    background: var(--azul-oscuro);
+  }
+  
+  @media (max-width: 1000px) {
+    .panel-cuerpo {
+      grid-template-columns: 1fr;
+    }
+  }
